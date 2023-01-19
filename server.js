@@ -61,23 +61,20 @@ app.post('/api/notes', (req, res) => {
 // Delete request for notes
 
 app.delete('/api/notes/:id', (req, res) => {
-  fs.readFile('./db/db.json', 'utf8', (error, data) => {
-    if (error) {
-      res.json(error)
-    } else {
-      res.json('Note deleted!')
-    }
-    let notes = JSON.parse(data)
-    let newNotes = notes.filter(note => note.id !== parseInt(req.params.id));
-    fs.writeFile('./db/db.json', JSON.stringify(newNotes), (error) => {
-      if (error) {
-        res.json(error);
-      } else {
-        res.json('Note deleted!');
-      }
-    });
+  fs.readFile('./db/db.json', 'utf8', (err, data) =>{
+    if (err) throw err;
+    let notes = JSON.parse(data);
+    const newNotes = notes.filter(note => note.id !== parseInt(req.params.id));
+
+    fs.writeFile('./db/db.json', JSON.stringify(newNotes), (err, data) => {
+      res.json('successssss!')
+    })
   })
-});
+})
+
+app.get('api/notes/:id', (req, res) => {
+  res.json(notes[req.params.id])
+})
 
 // GET request for landing page
 app.get('*', (req, res) =>
